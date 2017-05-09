@@ -48,6 +48,41 @@ $(function(){
 	//查询按钮和新增按钮样式切换
 	$(".mui-btn").click(function(){
 		$(this).addClass("mui-btn-primary").siblings().removeClass("mui-btn-primary");
+	});
+	//下单查询
+	function quaryCar(){
+		var car=$("#task_number").val();
+		var beginTime=$("#beginTime").val();
+		var endTime=$("#endTime").val();
+		$.ajax({
+			type:'post',
+			dataType:'json',
+			//向服务器请求的url
+			url:'',
+			async:true,
+			//发送到服务器的数据
+			data:{
+				car:car,
+				beginTime:beginTime,
+				endTime:endTime
+			},
+			success:function(Result){
+				if(Result){
+					var result=JSON.parse(Result);
+					if(result.success){
+						var data=result.data
+					}else{
+						mui.alert("数据有误")
+					}
+				}else{
+					mui.alert("数据有误")
+				}
+			}
+		});
+	};
+	//点击下单按钮查询
+	$("#search_order").click(function(){
+		quaryCar();
 	})
 	
 })
