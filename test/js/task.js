@@ -44,14 +44,40 @@ $(function(){
 		mui('body').on('tap','#add_task',
 			function(){document.location.href=this.href;
 		});
+		mui('body').on('tap','#task_back',
+			function(){document.location.href=this.href;
+		});
 	})(mui);
-	//查询按钮和新增按钮样式切换
-	$(".mui-btn").click(function(){
+	//派单查询按钮和新增按钮样式切换
+	$("#dispatch_btn").find(".mui-btn").click(function(){
 		$(this).addClass("mui-btn-primary").siblings().removeClass("mui-btn-primary");
 	});
+	
+	//点击下单模糊查询
+	function quaryLike(){
+		$.ajax({
+			type:"post",
+			url:$.domain(),
+			async:true,
+			data:{
+				api:'getFilterTaskId'
+			},
+			success:function(Result){
+				var data=JSON.parse(Result)
+				$("#task_number").val(data[0].Id)
+			}
+		});
+	}
+	
+	$("#task_number").click(function(){
+		quaryLike();
+	})
+
+
+
 	//下单查询
-	function quaryCar(){
-		var car=$("#task_number").val();
+	function quaryTask(){
+		var taskId=$("#task_number").val();
 		var beginTime=$("#beginTime").val();
 		var endTime=$("#endTime").val();
 		$.ajax({
@@ -62,10 +88,14 @@ $(function(){
 			async:true,
 			//发送到服务器的数据
 			data:{
-				car:car,
+				api:"",//请求的api接口
+				usr:"", 
+				pwd:"",
+				id:taskId,
 				beginTime:beginTime,
 				endTime:endTime
 			},
+			//查询成功后返回的回调函数
 			success:function(Result){
 				if(Result){
 					var result=JSON.parse(Result);
@@ -82,7 +112,7 @@ $(function(){
 	};
 	//点击下单按钮查询
 	$("#search_order").click(function(){
-		quaryCar();
+		quaryTask();
 	})
 	
 })
