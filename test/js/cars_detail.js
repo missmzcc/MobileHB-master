@@ -3,6 +3,7 @@ $(function(){
 	var domain = $.domain();
 	var app = "MN16040013";
 	var map = new BMap.Map("allmap");
+	var convertor = new BMap.Convertor();
 	/*---------------全局变量 end---------------*/
 	
 	function init(){
@@ -52,12 +53,14 @@ $(function(){
 	
 	//数据获取
 	function initCar(){
-		var car = sessionStorage.getItem("cars_status");
-		car = "鄂AP9018";
-		if(!car){
+		var carNo = sessionStorage.getItem("detail_car_no");
+		if(!carNo){
+			mui.alert("车牌号为空,点击确认转到搜索页面","提示","确认",function(){
+				window.location.href = "cars_search.html";
+			});
 			return;
 		}else{
-			$("#title").text(car);
+			$("#title").text(carNo);
 		}
 		$.ajax({
 			type:"post",
@@ -67,7 +70,7 @@ $(function(){
 				pwd:"40BD001563085FC35165329EA1FF5C5ECBDBBEEF",
 				api:"getCarDetail",
 				app:app,
-				car:car
+				car:carNo
 			},
 			success:function(Result){
 				if(Result){
@@ -84,9 +87,9 @@ $(function(){
 			}
 		});
 	}
-	//数据填充
+	//数据展示
 	function showData(Data){
-		$(".cars_detail_online").text(Data.online);
+		$(".cars_detail_online").text(Data.online === "1" ? "在线" : "离线");
 		$.each($(".cars_detail li"), function(index) {
 			if(index === 0){
 				$(this).find("a").first().text(Data.recordtime);
@@ -98,6 +101,28 @@ $(function(){
 				$(this).find("a").text(Data.oil);
 			}else if(index === 4){
 				$(this).find("a").text(Data.statusInfo);
+			}else if(index === 5){
+				var ths = $(this);
+				$.geocoder(Data.lng,Data.lat,function(rs){
+					ths.find("a").text(rs.address);
+					var marker = new BMap.Marker(rs.point);
+					map.panTo(rs.point);
+					map.addOverlay(marker);
+//					var msg = "就是这个车";
+//					var opts = {
+//						width:200,
+//						height:150,
+//						title: '<div><a href="javascript:void(0);">鄂A123KA</a><img src="../images/u142.png" class="main_info_img"/></div>'
+//					}
+//					$.openInfoWindow(map,marker,msg,opts);
+				},true);
+			}
+		});
+		$.each($(".cars_detail_user li"),function(index){
+			if(index === 0){
+				$(this).find("a").text(Data.vehicleNum);
+			}else if(index === 1){
+				$(this).find("a").text(Data.unitName);
 			}
 		});
 	}
