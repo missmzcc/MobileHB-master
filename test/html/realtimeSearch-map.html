@@ -40,12 +40,6 @@
 
 	init()
 	
-	
-	
-	var user = {
-    usr: "",
-    pwd: "",
-};
 var car = "";
 var beRealtime = false;
 var interval = 30;
@@ -142,26 +136,26 @@ function refresh(lng, lat, msg, lasttime, speed, direction, mileage) {
 //获取车辆方向和状态图片(轨迹回放静态点)
 function GetVehilceImg(speed, direction) {
     if (speed == "0") {
-        return "/Images/Direction/park.png";
+        return "../Images/Direction/park.png";
     }
     //根据角度获取方向
     var dire = $.direction(direction);
     if (dire == "正东") {
-        return "/Images/Direction/moveeast.png";
+        return "../Images/Direction/moveeast.png";
     }else if (dire == "正西") {
-        return "/Images/Direction/movewest.png";
+        return "../Images/Direction/movewest.png";
     }else if (dire == "正南") {
-        return "/Images/Direction/movesouth.png";
+        return "../Images/Direction/movesouth.png";
     }else if (dire == "正北") {
-        return "/Images/Direction/movenorth.png";
+        return "../Images/Direction/movenorth.png";
     }else if (dire == "东北") {
-        return "/Images/Direction/movenortheast.png";
+        return "../Images/Direction/movenortheast.png";
     }else if (dire == "东南") {
-        return "/Images/Direction/movesoutheast.png";
+        return "../Images/Direction/movesoutheast.png";
     }else if (dire == "西北") {
-        return "/Images/Direction/movenorthwest.png";
+        return "../Images/Direction/movenorthwest.png";
     }else {
-        return "/Images/Direction/movesouthwest.png";
+        return "../Images/Direction/movesouthwest.png";
     }
 }
 
